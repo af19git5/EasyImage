@@ -45,7 +45,7 @@ EasyImage.init(500, 500)
 ## License
 
 ```
-Copyright 2022 Jimmy Kang
+Copyright 2023 Jimmy Kang
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
