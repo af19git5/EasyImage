@@ -1,10 +1,10 @@
 package io.github.af19git5.entity;
 
-import io.github.af19git5.type.PositionX;
-import io.github.af19git5.type.PositionY;
+import io.github.af19git5.type.TextPosition;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 import java.awt.*;
 
@@ -14,283 +14,79 @@ import java.awt.*;
  * @author Jimmy Kang
  */
 @Getter
+@Setter
 public class Text extends Item {
 
     private final String text;
 
-    private final Color color;
+    private Color color = Color.BLACK;
 
-    private final Font font;
+    private Color backgroundColor = new Color(0, 0, 0, 0);
 
-    /**
-     * @param x 放置x軸位置
-     * @param y 放置y軸位置
-     * @param text 文字內容
-     * @param color 文字顏色
-     */
-    public Text(int x, int y, @NonNull String text, @NonNull Color color) {
-        this.setX(x);
-        this.setY(y);
+    private Font font;
+
+    private TextPosition position = TextPosition.LEFT;
+
+    private Boolean isAutoScaledFont = false;
+
+    public Text(@NonNull String text) {
         this.text = text;
-        this.color = color;
-        this.font = null;
     }
 
-    /**
-     * @param x 放置x軸位置
-     * @param y 放置y軸位置
-     * @param text 文字內容
-     * @param colorHex 文字顏色(16進位色碼)
-     */
-    public Text(int x, int y, @NonNull String text, @NonNull String colorHex) {
-        this.setX(x);
-        this.setY(y);
-        this.text = text;
-        this.color = Color.decode(colorHex);
-        this.font = null;
+    public static Builder init(@NonNull String text) {
+        return new Builder(text);
     }
 
-    /**
-     * @param x 放置x軸位置
-     * @param y 放置y軸位置
-     * @param text 文字內容
-     * @param color 文字顏色
-     * @param font 文字字體
-     */
-    public Text(int x, int y, @NonNull String text, @NonNull Color color, Font font) {
-        this.setX(x);
-        this.setY(y);
-        this.text = text;
-        this.color = color;
-        this.font = font;
-    }
+    public static class Builder {
 
-    /**
-     * @param x 放置x軸位置
-     * @param y 放置y軸位置
-     * @param text 文字內容
-     * @param colorHex 文字顏色(16進位色碼)
-     * @param font 文字字體
-     */
-    public Text(int x, int y, @NonNull String text, @NonNull String colorHex, Font font) {
-        this.setX(x);
-        this.setY(y);
-        this.text = text;
-        this.color = Color.decode(colorHex);
-        this.font = font;
-    }
+        private final Text text;
 
-    /**
-     * @param positionX 放置x軸位置
-     * @param y 放置y軸位置
-     * @param text 文字內容
-     * @param color 文字顏色
-     */
-    public Text(@NonNull PositionX positionX, int y, @NonNull String text, @NonNull Color color) {
-        this.setPositionX(positionX);
-        this.setY(y);
-        this.text = text;
-        this.color = color;
-        this.font = null;
-    }
+        public Builder(@NonNull String text) {
+            this.text = new Text(text);
+        }
 
-    /**
-     * @param positionX 放置x軸位置
-     * @param y 放置y軸位置
-     * @param text 文字內容
-     * @param colorHex 文字顏色(16進位色碼)
-     */
-    public Text(
-            @NonNull PositionX positionX, int y, @NonNull String text, @NonNull String colorHex) {
-        this.setPositionX(positionX);
-        this.setY(y);
-        this.text = text;
-        this.color = Color.decode(colorHex);
-        this.font = null;
-    }
+        public Builder setWidth(int width) {
+            this.text.setWidth(width);
+            return this;
+        }
 
-    /**
-     * @param positionX 放置x軸位置
-     * @param y 放置y軸位置
-     * @param text 文字內容
-     * @param color 文字顏色
-     * @param font 文字字體
-     */
-    public Text(
-            @NonNull PositionX positionX,
-            int y,
-            @NonNull String text,
-            @NonNull Color color,
-            Font font) {
-        this.setPositionX(positionX);
-        this.setY(y);
-        this.text = text;
-        this.color = color;
-        this.font = font;
-    }
+        public Builder setColor(@NonNull Color color) {
+            this.text.setColor(color);
+            return this;
+        }
 
-    /**
-     * @param positionX 放置x軸位置
-     * @param y 放置y軸位置
-     * @param text 文字內容
-     * @param colorHex 文字顏色(16進位色碼)
-     * @param font 文字字體
-     */
-    public Text(
-            @NonNull PositionX positionX,
-            int y,
-            @NonNull String text,
-            @NonNull String colorHex,
-            Font font) {
-        this.setPositionX(positionX);
-        this.setY(y);
-        this.text = text;
-        this.color = Color.decode(colorHex);
-        this.font = font;
-    }
+        public Builder setColor(@NonNull String colorHex) {
+            this.text.setColor(Color.decode(colorHex));
+            return this;
+        }
 
-    /**
-     * @param x 放置x軸位置
-     * @param positionY 放置y軸位置
-     * @param text 文字內容
-     * @param color 文字顏色
-     */
-    public Text(int x, @NonNull PositionY positionY, @NonNull String text, @NonNull Color color) {
-        this.setX(x);
-        this.setPositionY(positionY);
-        this.text = text;
-        this.color = color;
-        this.font = null;
-    }
+        public Builder setBackgroundColor(@NonNull Color color) {
+            this.text.setBackgroundColor(color);
+            return this;
+        }
 
-    /**
-     * @param x 放置x軸位置
-     * @param positionY 放置y軸位置
-     * @param text 文字內容
-     * @param colorHex 文字顏色(16進位色碼)
-     */
-    public Text(
-            int x, @NonNull PositionY positionY, @NonNull String text, @NonNull String colorHex) {
-        this.setX(x);
-        this.setPositionY(positionY);
-        this.text = text;
-        this.color = Color.decode(colorHex);
-        this.font = null;
-    }
+        public Builder setBackgroundColor(@NonNull String colorHex) {
+            this.text.setBackgroundColor(Color.decode(colorHex));
+            return this;
+        }
 
-    /**
-     * @param x 放置x軸位置
-     * @param positionY 放置y軸位置
-     * @param text 文字內容
-     * @param color 文字顏色
-     * @param font 文字字體
-     */
-    public Text(
-            int x,
-            @NonNull PositionY positionY,
-            @NonNull String text,
-            @NonNull Color color,
-            Font font) {
-        this.setX(x);
-        this.setPositionY(positionY);
-        this.text = text;
-        this.color = color;
-        this.font = font;
-    }
+        public Builder setFont(@NonNull Font font) {
+            this.text.setFont(font);
+            return this;
+        }
 
-    /**
-     * @param x 放置x軸位置
-     * @param positionY 放置y軸位置
-     * @param text 文字內容
-     * @param colorHex 文字顏色(16進位色碼)
-     * @param font 文字字體
-     */
-    public Text(
-            int x,
-            @NonNull PositionY positionY,
-            @NonNull String text,
-            @NonNull String colorHex,
-            Font font) {
-        this.setX(x);
-        this.setPositionY(positionY);
-        this.text = text;
-        this.color = Color.decode(colorHex);
-        this.font = font;
-    }
+        public Builder setPosition(@NonNull TextPosition position) {
+            this.text.setPosition(position);
+            return this;
+        }
 
-    /**
-     * @param positionX 放置x軸位置
-     * @param positionY 放置y軸位置
-     * @param text 文字內容
-     * @param color 文字顏色
-     */
-    public Text(
-            @NonNull PositionX positionX,
-            @NonNull PositionY positionY,
-            @NonNull String text,
-            @NonNull Color color) {
-        this.setPositionX(positionX);
-        this.setPositionY(positionY);
-        this.text = text;
-        this.color = color;
-        this.font = null;
-    }
+        public Builder setIsAutoScaledFont(boolean isAutoScaledFont) {
+            this.text.setIsAutoScaledFont(isAutoScaledFont);
+            return this;
+        }
 
-    /**
-     * @param positionX 放置x軸位置
-     * @param positionY 放置y軸位置
-     * @param text 文字內容
-     * @param colorHex 文字顏色(16進位色碼)
-     */
-    public Text(
-            @NonNull PositionX positionX,
-            @NonNull PositionY positionY,
-            @NonNull String text,
-            @NonNull String colorHex) {
-        this.setPositionX(positionX);
-        this.setPositionY(positionY);
-        this.text = text;
-        this.color = Color.decode(colorHex);
-        this.font = null;
-    }
-
-    /**
-     * @param positionX 放置x軸位置
-     * @param positionY 放置y軸位置
-     * @param text 文字內容
-     * @param color 文字顏色
-     * @param font 文字字體
-     */
-    public Text(
-            @NonNull PositionX positionX,
-            @NonNull PositionY positionY,
-            @NonNull String text,
-            @NonNull Color color,
-            Font font) {
-        this.setPositionX(positionX);
-        this.setPositionY(positionY);
-        this.text = text;
-        this.color = color;
-        this.font = font;
-    }
-
-    /**
-     * @param positionX 放置x軸位置
-     * @param positionY 放置y軸位置
-     * @param text 文字內容
-     * @param colorHex 文字顏色(16進位色碼)
-     * @param font 文字字體
-     */
-    public Text(
-            @NonNull PositionX positionX,
-            @NonNull PositionY positionY,
-            @NonNull String text,
-            @NonNull String colorHex,
-            Font font) {
-        this.setPositionX(positionX);
-        this.setPositionY(positionY);
-        this.text = text;
-        this.color = Color.decode(colorHex);
-        this.font = font;
+        public Text build() {
+            return text;
+        }
     }
 }

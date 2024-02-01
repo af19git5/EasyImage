@@ -26,7 +26,7 @@ public class EasyImage {
      *
      * @param width 圖片寬
      * @param height 圖片高
-     * @param backgroundColor 圖片背景色(16進位色碼)
+     * @param backgroundColor 圖片背景色
      */
     public static ImageBuilder init(int width, int height, Color backgroundColor) {
         return new ImageBuilder(width, height, backgroundColor);

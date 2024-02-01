@@ -5,6 +5,7 @@ import io.github.af19git5.entity.Text;
 import io.github.af19git5.exception.ImageException;
 import io.github.af19git5.type.OutputType;
 import io.github.af19git5.type.PositionX;
+import io.github.af19git5.type.TextPosition;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,17 +32,24 @@ public class EasyImageTests {
             throw new IOException("查無測試檔案");
         }
         File testImageFile = new File(testImageUrl.toURI());
-        Font font = new Font("Arial", Font.BOLD, 36);
+        Font font = new Font("Arial", Font.BOLD, 30);
         ImageBuilder imageBuilder =
                 EasyImage.init(500, 500, Color.YELLOW)
-                        .add(new Image(PositionX.MIDDLE, 70, testImageFile, 300, 300))
                         .add(
-                                new Text(
-                                        PositionX.MIDDLE,
-                                        70 + 300 + 20,
-                                        "測試鴿子\n~咕咕咕~",
-                                        Color.BLACK,
-                                        font));
+                                PositionX.MIDDLE,
+                                70,
+                                Image.init(testImageFile).setWidth(300).setHeight(300).build())
+                        .add(
+                                PositionX.MIDDLE,
+                                70 + 300 + 20,
+                                Text.init("測試鴿子\n咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕")
+                                        .setWidth(300)
+                                        .setColor(Color.RED)
+                                        .setBackgroundColor(Color.BLUE)
+                                        .setPosition(TextPosition.MIDDLE)
+                                        .setFont(font)
+                                        .setIsAutoScaledFont(false)
+                                        .build());
         imageBuilder.buildFile(OutputType.PNG, new File(TEST_OUTPUT_PATH + "output.png"));
         System.out.println("Base64圖檔:\n" + imageBuilder.buildBase64(OutputType.PNG));
     }

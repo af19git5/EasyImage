@@ -13,7 +13,7 @@
 <dependency>
     <groupId>io.github.af19git5</groupId>
     <artifactId>easy-image</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -33,10 +33,25 @@
 ```java
 // 初始化圖片底框
 EasyImage.init(500, 500)
-        // 插入圖片(x軸位置, y軸位置, 圖檔來源, 覆寫圖檔寬, 覆寫圖檔高)
-        .add(new Image(PositionX.MIDDLE, PositionY.MIDDLE, "要插入的圖檔位置", 300, 300))
-        // 插入文字(x軸位置, y軸位置, 插入文字, 文字顏色, 字體物件)
-        .add(new Text(PositionX.MIDDLE, PositionY.MIDDLE, "測試文字", Color.BLACK, font))
+        // 插入圖片(x軸位置, y軸位置, 圖檔資訊)
+        .add(
+                PositionX.MIDDLE,
+                PositionY.MIDDLE,
+                Image.init(file)
+                        .setWidth(300)
+                        .setHeight(300)
+                        .build())
+        // 插入文字(x軸位置, y軸位置, 文字資訊)
+        .add(
+                PositionX.MIDDLE,
+                PositionY.MIDDLE,
+                Text.init("測試文字")
+                        .setWidth(300)
+                        .setColor(Color.BLACK)
+                        .setPosition(TextPosition.MIDDLE)
+                        .setFont(font)
+                        .setIsAutoScaledFont(false)
+                        .build())
         // 寫出檔案(輸出格式, 輸出位置)
         .buildFile(OutputType.PNG, "寫出檔案位置");
 ```
