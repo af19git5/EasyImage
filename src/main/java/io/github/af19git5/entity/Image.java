@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 @Getter
 public class Image extends Item {
 
+    /** 圖片資源 */
     private final BufferedImage bufferedImage;
 
     public Image(@NonNull File file) throws ImageException {

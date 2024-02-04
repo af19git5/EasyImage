@@ -1,6 +1,7 @@
 package io.github.af19git5.entity;
 
 import io.github.af19git5.type.TextPosition;
+import io.github.af19git5.utils.ColorUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -17,16 +18,34 @@ import java.awt.*;
 @Setter
 public class Text extends Item {
 
+    /** 文字內容 */
     private final String text;
 
+    /** 文字顏色 */
     private Color color = Color.BLACK;
 
+    /** 文字背景顏色 */
     private Color backgroundColor = new Color(0, 0, 0, 0);
 
+    /** 字體樣式 */
     private Font font;
 
+    /** 上內間距 */
+    private Integer paddingTop = 0;
+
+    /** 左內間距 */
+    private Integer paddingLeft = 0;
+
+    /** 右內間距 */
+    private Integer paddingRight = 0;
+
+    /** 下內間距 */
+    private Integer paddingBottom = 0;
+
+    /** 文字對齊 */
     private TextPosition position = TextPosition.LEFT;
 
+    /** 是否自動縮小字體 */
     private Boolean isAutoScaledFont = false;
 
     public Text(@NonNull String text) {
@@ -50,13 +69,18 @@ public class Text extends Item {
             return this;
         }
 
+        public Builder setHeight(int height) {
+            this.text.setHeight(height);
+            return this;
+        }
+
         public Builder setColor(@NonNull Color color) {
             this.text.setColor(color);
             return this;
         }
 
         public Builder setColor(@NonNull String colorHex) {
-            this.text.setColor(Color.decode(colorHex));
+            this.text.setColor(ColorUtils.parseArgbColorHexToColor(colorHex));
             return this;
         }
 
@@ -66,7 +90,7 @@ public class Text extends Item {
         }
 
         public Builder setBackgroundColor(@NonNull String colorHex) {
-            this.text.setBackgroundColor(Color.decode(colorHex));
+            this.text.setBackgroundColor(ColorUtils.parseArgbColorHexToColor(colorHex));
             return this;
         }
 
@@ -82,6 +106,34 @@ public class Text extends Item {
 
         public Builder setIsAutoScaledFont(boolean isAutoScaledFont) {
             this.text.setIsAutoScaledFont(isAutoScaledFont);
+            return this;
+        }
+
+        public Builder setPadding(int padding) {
+            this.text.setPaddingTop(padding);
+            this.text.setPaddingLeft(padding);
+            this.text.setPaddingRight(padding);
+            this.text.setPaddingBottom(padding);
+            return this;
+        }
+
+        public Builder setPaddingTop(int padding) {
+            this.text.setPaddingTop(padding);
+            return this;
+        }
+
+        public Builder setPaddingLeft(int padding) {
+            this.text.setPaddingLeft(padding);
+            return this;
+        }
+
+        public Builder setPaddingRight(int padding) {
+            this.text.setPaddingRight(padding);
+            return this;
+        }
+
+        public Builder setPaddingBottom(int padding) {
+            this.text.setPaddingBottom(padding);
             return this;
         }
 

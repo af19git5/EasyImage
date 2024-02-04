@@ -5,6 +5,7 @@ import io.github.af19git5.entity.Text;
 import io.github.af19git5.exception.ImageException;
 import io.github.af19git5.type.OutputType;
 import io.github.af19git5.type.PositionX;
+import io.github.af19git5.type.PositionY;
 import io.github.af19git5.type.TextPosition;
 
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class EasyImageTests {
             throw new IOException("查無測試檔案");
         }
         File testImageFile = new File(testImageUrl.toURI());
-        Font font = new Font("Arial", Font.BOLD, 30);
+        Font font = new Font("Arial", Font.BOLD, 20);
         ImageBuilder imageBuilder =
                 EasyImage.init(500, 500, Color.YELLOW)
                         .add(
@@ -41,16 +42,19 @@ public class EasyImageTests {
                                 Image.init(testImageFile).setWidth(300).setHeight(300).build())
                         .add(
                                 PositionX.MIDDLE,
-                                70 + 300 + 20,
-                                Text.init("測試鴿子\n咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕")
+                                PositionY.BOTTOM,
+                                Text.init("測試鴿子\n咕咕咕")
                                         .setWidth(300)
                                         .setColor(Color.RED)
                                         .setBackgroundColor(Color.BLUE)
                                         .setPosition(TextPosition.MIDDLE)
                                         .setFont(font)
-                                        .setIsAutoScaledFont(false)
+                                        .setPaddingTop(10)
+                                        .setPaddingBottom(30)
+                                        .setPaddingLeft(10)
+                                        .setPaddingRight(30)
+                                        .setIsAutoScaledFont(true)
                                         .build());
         imageBuilder.buildFile(OutputType.PNG, new File(TEST_OUTPUT_PATH + "output.png"));
-        System.out.println("Base64圖檔:\n" + imageBuilder.buildBase64(OutputType.PNG));
     }
 }

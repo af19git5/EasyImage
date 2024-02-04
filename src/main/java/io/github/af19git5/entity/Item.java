@@ -1,6 +1,5 @@
 package io.github.af19git5.entity;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +11,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Item {
+
+    /** 寬度 */
     private Integer width = 0;
 
+    /** 高度 */
     private Integer height = 0;
 }
