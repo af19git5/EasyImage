@@ -1,8 +1,8 @@
 package io.github.af19git5.builder;
 
+import io.github.af19git5.entity.*;
 import io.github.af19git5.entity.Image;
-import io.github.af19git5.entity.Item;
-import io.github.af19git5.entity.Text;
+import io.github.af19git5.entity.Rectangle;
 import io.github.af19git5.exception.ImageException;
 import io.github.af19git5.type.OutputType;
 import io.github.af19git5.type.PositionX;
@@ -13,6 +13,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -165,6 +168,102 @@ public class ImageBuilder {
     }
 
     /**
+     * 加入矩形
+     *
+     * @param x x軸位置
+     * @param y y軸位置
+     * @param rectangle 矩形物件
+     */
+    public ImageBuilder add(int x, int y, Rectangle rectangle) {
+        this.itemList.add(new ImageItem(x, y, PositionX.NONE, PositionY.NONE, rectangle));
+        return this;
+    }
+
+    /**
+     * 加入矩形
+     *
+     * @param positionX x軸定位
+     * @param y y軸位置
+     * @param rectangle 矩形物件
+     */
+    public ImageBuilder add(PositionX positionX, int y, Rectangle rectangle) {
+        this.itemList.add(new ImageItem(0, y, positionX, PositionY.NONE, rectangle));
+        return this;
+    }
+
+    /**
+     * 加入矩形
+     *
+     * @param x x軸位置
+     * @param positionY y軸定位
+     * @param rectangle 矩形物件
+     */
+    public ImageBuilder add(int x, PositionY positionY, Rectangle rectangle) {
+        this.itemList.add(new ImageItem(x, 0, PositionX.NONE, positionY, rectangle));
+        return this;
+    }
+
+    /**
+     * 加入矩形
+     *
+     * @param positionX x軸定位
+     * @param positionY y軸定位
+     * @param rectangle 矩形物件
+     */
+    public ImageBuilder add(PositionX positionX, PositionY positionY, Rectangle rectangle) {
+        this.itemList.add(new ImageItem(0, 0, positionX, positionY, rectangle));
+        return this;
+    }
+
+    /**
+     * 加入橢圓
+     *
+     * @param x x軸位置
+     * @param y y軸位置
+     * @param ellipse 橢圓物件
+     */
+    public ImageBuilder add(int x, int y, Ellipse ellipse) {
+        this.itemList.add(new ImageItem(x, y, PositionX.NONE, PositionY.NONE, ellipse));
+        return this;
+    }
+
+    /**
+     * 加入橢圓
+     *
+     * @param positionX x軸定位
+     * @param y y軸位置
+     * @param ellipse 橢圓物件
+     */
+    public ImageBuilder add(PositionX positionX, int y, Ellipse ellipse) {
+        this.itemList.add(new ImageItem(0, y, positionX, PositionY.NONE, ellipse));
+        return this;
+    }
+
+    /**
+     * 加入橢圓
+     *
+     * @param x x軸位置
+     * @param positionY y軸定位
+     * @param ellipse 橢圓物件
+     */
+    public ImageBuilder add(int x, PositionY positionY, Ellipse ellipse) {
+        this.itemList.add(new ImageItem(x, 0, PositionX.NONE, positionY, ellipse));
+        return this;
+    }
+
+    /**
+     * 加入橢圓
+     *
+     * @param positionX x軸定位
+     * @param positionY y軸定位
+     * @param ellipse 矩形物件
+     */
+    public ImageBuilder add(PositionX positionX, PositionY positionY, Ellipse ellipse) {
+        this.itemList.add(new ImageItem(0, 0, positionX, positionY, ellipse));
+        return this;
+    }
+
+    /**
      * 建立至輸出流
      *
      * @param outputType 輸出類別
@@ -232,6 +331,9 @@ public class ImageBuilder {
         Graphics2D graphics = bufferedImage.createGraphics();
         graphics.setColor(this.backgroundColor);
         graphics.fillRect(0, 0, this.width, this.height);
+        // 加入抗鋸齒
+        graphics.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // 組出要繪製物件
         List<DrawItem> drawItemList = new ArrayList<>();
@@ -240,6 +342,10 @@ public class ImageBuilder {
                 drawItemList.addAll(buildDrawTextItem(graphics, imageItem));
             } else if (imageItem.getItem() instanceof Image) {
                 drawItemList.add(buildDrawImageItem(graphics, imageItem));
+            } else if (imageItem.getItem() instanceof Rectangle) {
+                drawItemList.add(buildDrawRectangleItem(graphics, imageItem));
+            } else if (imageItem.getItem() instanceof Ellipse) {
+                drawItemList.add(buildDrawEllipseItem(graphics, imageItem));
             }
         }
 
@@ -251,6 +357,8 @@ public class ImageBuilder {
                 drawImageItem(graphics, (DrawImageItem) drawItem);
             } else if (drawItem instanceof DrawRectangleItem) {
                 drawRectangleItem(graphics, (DrawRectangleItem) drawItem);
+            } else if (drawItem instanceof DrawEllipseItem) {
+                drawEllipseItem(graphics, (DrawEllipseItem) drawItem);
             }
         }
         return graphics;
@@ -523,14 +631,173 @@ public class ImageBuilder {
         return drawRectangleItem;
     }
 
+    /** 建立要繪製的矩形項目 */
+    private DrawRectangleItem buildDrawRectangleItem(Graphics2D graphics, ImageItem imageItem) {
+        Rectangle rectangle = (Rectangle) imageItem.getItem();
+        DrawRectangleItem drawRectangleItem = new DrawRectangleItem();
+        drawRectangleItem.setHeight(rectangle.getHeight());
+        drawRectangleItem.setWidth(rectangle.getWidth());
+        drawRectangleItem.setColor(rectangle.getColor());
+        drawRectangleItem.setStrokeWidth(rectangle.getStrokeWidth());
+        drawRectangleItem.setStrokeColor(rectangle.getStrokeColor());
+        drawRectangleItem.setCornerRadius(rectangle.getCornerRadius());
+        switch (imageItem.getPositionX()) {
+            case LEFT:
+                drawRectangleItem.setX(0);
+                break;
+            case RIGHT:
+                drawRectangleItem.setX(this.width - rectangle.getWidth());
+                break;
+            case MIDDLE:
+                drawRectangleItem.setX((this.width - rectangle.getWidth()) / 2);
+                break;
+            default:
+                drawRectangleItem.setX(imageItem.getX());
+                break;
+        }
+        switch (imageItem.getPositionY()) {
+            case TOP:
+                drawRectangleItem.setY(0);
+                break;
+            case BOTTOM:
+                drawRectangleItem.setY(this.height - rectangle.getHeight());
+                break;
+            case MIDDLE:
+                drawRectangleItem.setY((this.height - rectangle.getHeight()) / 2);
+                break;
+            default:
+                drawRectangleItem.setY(imageItem.getY());
+                break;
+        }
+        return drawRectangleItem;
+    }
+
     /** 繪製矩形項目 */
     private void drawRectangleItem(Graphics2D graphics, DrawRectangleItem drawRectangleItem) {
+        Shape shape;
+        if (drawRectangleItem.getCornerRadius() > 0) {
+            // 使用圓角矩形
+            if (drawRectangleItem.getStrokeWidth() > 0) {
+                shape =
+                        new RoundRectangle2D.Float(
+                                drawRectangleItem.getX()
+                                        + ((float) drawRectangleItem.getStrokeWidth() / 2),
+                                drawRectangleItem.getY()
+                                        + ((float) drawRectangleItem.getStrokeWidth() / 2),
+                                drawRectangleItem.getWidth() - drawRectangleItem.getStrokeWidth(),
+                                drawRectangleItem.getHeight() - drawRectangleItem.getStrokeWidth(),
+                                drawRectangleItem.getCornerRadius(),
+                                drawRectangleItem.getCornerRadius());
+                Stroke oldStroke = graphics.getStroke();
+                graphics.setColor(drawRectangleItem.getStrokeColor());
+                graphics.setStroke(new BasicStroke(drawRectangleItem.getStrokeWidth()));
+                graphics.draw(shape);
+                graphics.setStroke(oldStroke);
+            } else {
+                shape =
+                        new RoundRectangle2D.Float(
+                                drawRectangleItem.getX(),
+                                drawRectangleItem.getY(),
+                                drawRectangleItem.getWidth(),
+                                drawRectangleItem.getHeight(),
+                                drawRectangleItem.getCornerRadius(),
+                                drawRectangleItem.getCornerRadius());
+            }
+        } else {
+            // 使用矩形
+            if (drawRectangleItem.getStrokeWidth() > 0) {
+                shape =
+                        new Rectangle2D.Float(
+                                drawRectangleItem.getX()
+                                        + ((float) drawRectangleItem.getStrokeWidth() / 2),
+                                drawRectangleItem.getY()
+                                        + ((float) drawRectangleItem.getStrokeWidth() / 2),
+                                drawRectangleItem.getWidth() - drawRectangleItem.getStrokeWidth(),
+                                drawRectangleItem.getHeight() - drawRectangleItem.getStrokeWidth());
+                Stroke oldStroke = graphics.getStroke();
+                graphics.setColor(drawRectangleItem.getStrokeColor());
+                graphics.setStroke(new BasicStroke(drawRectangleItem.getStrokeWidth()));
+                graphics.draw(shape);
+                graphics.setStroke(oldStroke);
+            } else {
+                shape =
+                        new Rectangle2D.Float(
+                                drawRectangleItem.getX(),
+                                drawRectangleItem.getY(),
+                                drawRectangleItem.getWidth(),
+                                drawRectangleItem.getHeight());
+            }
+        }
         graphics.setColor(drawRectangleItem.getColor());
-        graphics.fillRect(
-                drawRectangleItem.getX(),
-                drawRectangleItem.getY(),
-                drawRectangleItem.getWidth(),
-                drawRectangleItem.getHeight());
+        graphics.fill(shape);
+    }
+
+    /** 建立要繪製的橢圓項目 */
+    private DrawEllipseItem buildDrawEllipseItem(Graphics2D graphics, ImageItem imageItem) {
+        Ellipse ellipse = (Ellipse) imageItem.getItem();
+        DrawEllipseItem drawEllipseItem = new DrawEllipseItem();
+        drawEllipseItem.setHeight(ellipse.getHeight());
+        drawEllipseItem.setWidth(ellipse.getWidth());
+        drawEllipseItem.setColor(ellipse.getColor());
+        drawEllipseItem.setStrokeWidth(ellipse.getStrokeWidth());
+        drawEllipseItem.setStrokeColor(ellipse.getStrokeColor());
+        switch (imageItem.getPositionX()) {
+            case LEFT:
+                drawEllipseItem.setX(0);
+                break;
+            case RIGHT:
+                drawEllipseItem.setX(this.width - ellipse.getWidth());
+                break;
+            case MIDDLE:
+                drawEllipseItem.setX((this.width - ellipse.getWidth()) / 2);
+                break;
+            default:
+                drawEllipseItem.setX(imageItem.getX());
+                break;
+        }
+        switch (imageItem.getPositionY()) {
+            case TOP:
+                drawEllipseItem.setY(0);
+                break;
+            case BOTTOM:
+                drawEllipseItem.setY(this.height - ellipse.getHeight());
+                break;
+            case MIDDLE:
+                drawEllipseItem.setY((this.height - ellipse.getHeight()) / 2);
+                break;
+            default:
+                drawEllipseItem.setY(imageItem.getY());
+                break;
+        }
+        return drawEllipseItem;
+    }
+
+    /** 繪製橢圓項目 */
+    private void drawEllipseItem(Graphics2D graphics, DrawEllipseItem drawEllipseItem) {
+        Shape shape;
+        // 使用圓角矩形
+        if (drawEllipseItem.getStrokeWidth() > 0) {
+            shape =
+                    new Ellipse2D.Float(
+                            drawEllipseItem.getX() + ((float) drawEllipseItem.getStrokeWidth() / 2),
+                            drawEllipseItem.getY() + ((float) drawEllipseItem.getStrokeWidth() / 2),
+                            drawEllipseItem.getWidth() - drawEllipseItem.getStrokeWidth(),
+                            drawEllipseItem.getHeight() - drawEllipseItem.getStrokeWidth());
+            Stroke oldStroke = graphics.getStroke();
+            graphics.setColor(drawEllipseItem.getStrokeColor());
+            graphics.setStroke(new BasicStroke(drawEllipseItem.getStrokeWidth()));
+            graphics.draw(shape);
+            graphics.setStroke(oldStroke);
+        } else {
+            shape =
+                    new Ellipse2D.Float(
+                            drawEllipseItem.getX(),
+                            drawEllipseItem.getY(),
+                            drawEllipseItem.getWidth(),
+                            drawEllipseItem.getHeight());
+        }
+        graphics.setColor(drawEllipseItem.getColor());
+        graphics.fill(shape);
     }
 
     @Getter
@@ -573,6 +840,27 @@ public class ImageBuilder {
         private Integer height;
 
         private Color color;
+
+        private Integer strokeWidth = 0;
+
+        private Color strokeColor = Color.BLACK;
+
+        private Integer cornerRadius = 0;
+    }
+
+    @Getter
+    @Setter
+    private static class DrawEllipseItem extends DrawItem {
+
+        private Integer width;
+
+        private Integer height;
+
+        private Color color;
+
+        private Integer strokeWidth = 0;
+
+        private Color strokeColor = Color.BLACK;
     }
 
     @Getter

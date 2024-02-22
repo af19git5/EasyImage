@@ -13,8 +13,8 @@ import lombok.Setter;
 public class Item {
 
     /** 寬度 */
-    private Integer width = 0;
+    protected Integer width = 0;
 
     /** 高度 */
-    private Integer height = 0;
+    protected Integer height = 0;
 }

@@ -13,7 +13,7 @@
 <dependency>
     <groupId>io.github.af19git5</groupId>
     <artifactId>easy-image</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -24,6 +24,8 @@
 * **EasyImage** -> Easy Image功能入口。
 * **Text** -> 操控插入的文字物件。
 * **Image** -> 操控插入的圖片物件。
+* **Rectangle** -> 操控插入的矩形物件。
+* **Ellipse** -> 操控插入的橢圓物件。
 * **OutputType** -> 輸出格式。
 * **PositionX** -> 放置X軸位置。
 * **PositionY** -> 放置Y軸位置。
@@ -52,10 +54,30 @@ EasyImage.init(500, 500)
                         .setFont(font)
                         .setIsAutoScaledFont(false)
                         .build())
+        // 插入矩形(x軸位置, y軸位置, 矩形資訊)
+        .add(
+                PositionX.MIDDLE,
+                PositionY.MIDDLE,
+                Rectangle.init(100, 100)
+                        .setColor(Color.RED)
+                        .setStrokeWidth(10)
+                        .setStrokeColor(Color.GREEN)
+                        .setCornerRadius(20)
+                        .build())
+        // 插入橢圓(x軸位置, y軸位置, 橢圓資訊)
+        .add(
+                PositionX.MIDDLE,
+                PositionY.MIDDLE,
+                Ellipse.init(70, 70)
+                        .setColor(Color.BLUE)
+                        .setStrokeWidth(10)
+                        .setStrokeColor(Color.GREEN)
+                        .build())
         // 寫出檔案(輸出格式, 輸出位置)
         .buildFile(OutputType.PNG, "寫出檔案位置");
 ```
-建議可以去看範例中的方法及物件的建構子，有很多種使用方式，註解內也有說明。
+### 備註
+* 物件中設定顏色方法`setColor(colorHex)`中字串色碼必須帶入包含透明色的16進位色碼，範例: `#B2AC0E0E`。
 
 ## License
 

@@ -1,6 +1,7 @@
 import io.github.af19git5.EasyImage;
-import io.github.af19git5.builder.ImageBuilder;
+import io.github.af19git5.entity.Ellipse;
 import io.github.af19git5.entity.Image;
+import io.github.af19git5.entity.Rectangle;
 import io.github.af19git5.entity.Text;
 import io.github.af19git5.exception.ImageException;
 import io.github.af19git5.type.OutputType;
@@ -34,27 +35,43 @@ public class EasyImageTests {
         }
         File testImageFile = new File(testImageUrl.toURI());
         Font font = new Font("Arial", Font.BOLD, 20);
-        ImageBuilder imageBuilder =
-                EasyImage.init(500, 500, Color.YELLOW)
-                        .add(
-                                PositionX.MIDDLE,
-                                70,
-                                Image.init(testImageFile).setWidth(300).setHeight(300).build())
-                        .add(
-                                PositionX.MIDDLE,
-                                PositionY.BOTTOM,
-                                Text.init("測試鴿子\n咕咕咕")
-                                        .setWidth(300)
-                                        .setColor(Color.RED)
-                                        .setBackgroundColor(Color.BLUE)
-                                        .setPosition(TextPosition.MIDDLE)
-                                        .setFont(font)
-                                        .setPaddingTop(10)
-                                        .setPaddingBottom(30)
-                                        .setPaddingLeft(10)
-                                        .setPaddingRight(30)
-                                        .setIsAutoScaledFont(true)
-                                        .build());
-        imageBuilder.buildFile(OutputType.PNG, new File(TEST_OUTPUT_PATH + "output.png"));
+        EasyImage.init(500, 500, Color.YELLOW)
+                .add(
+                        PositionX.MIDDLE,
+                        70,
+                        Image.init(testImageFile).setWidth(300).setHeight(300).build())
+                .add(
+                        PositionX.MIDDLE,
+                        PositionY.BOTTOM,
+                        Text.init("測試鴿子\n咕咕咕")
+                                .setWidth(300)
+                                .setColor(Color.RED)
+                                .setBackgroundColor(Color.BLUE)
+                                .setPosition(TextPosition.MIDDLE)
+                                .setFont(font)
+                                .setPaddingTop(10)
+                                .setPaddingBottom(30)
+                                .setPaddingLeft(10)
+                                .setPaddingRight(30)
+                                .setIsAutoScaledFont(true)
+                                .build())
+                .add(
+                        PositionX.MIDDLE,
+                        PositionY.MIDDLE,
+                        Rectangle.init(100, 100)
+                                .setColor(Color.RED)
+                                .setStrokeWidth(10)
+                                .setStrokeColor(Color.GREEN)
+                                .setCornerRadius(20)
+                                .build())
+                .add(
+                        PositionX.MIDDLE,
+                        PositionY.MIDDLE,
+                        Ellipse.init(70, 70)
+                                .setColor(Color.BLUE)
+                                .setStrokeWidth(10)
+                                .setStrokeColor(Color.GREEN)
+                                .build())
+                .buildFile(OutputType.PNG, new File(TEST_OUTPUT_PATH + "output.png"));
     }
 }
