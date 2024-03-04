@@ -63,6 +63,7 @@ public class EasyImageTests {
                                 .setStrokeWidth(10)
                                 .setStrokeColor(Color.GREEN)
                                 .setCornerRadius(20)
+                                .setStrokeWidth(5)
                                 .build())
                 .add(
                         PositionX.MIDDLE,
@@ -71,6 +72,7 @@ public class EasyImageTests {
                                 .setColor(Color.BLUE)
                                 .setStrokeWidth(10)
                                 .setStrokeColor(Color.GREEN)
+                                .setStrokeWidth(5)
                                 .build())
                 .buildFile(OutputType.PNG, new File(TEST_OUTPUT_PATH + "output.png"));
     }

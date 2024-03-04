@@ -674,11 +674,10 @@ public class ImageBuilder {
 
     /** 繪製矩形項目 */
     private void drawRectangleItem(Graphics2D graphics, DrawRectangleItem drawRectangleItem) {
-        Shape shape;
         if (drawRectangleItem.getCornerRadius() > 0) {
             // 使用圓角矩形
             if (drawRectangleItem.getStrokeWidth() > 0) {
-                shape =
+                Shape shape =
                         new RoundRectangle2D.Float(
                                 drawRectangleItem.getX()
                                         + ((float) drawRectangleItem.getStrokeWidth() / 2),
@@ -688,25 +687,28 @@ public class ImageBuilder {
                                 drawRectangleItem.getHeight() - drawRectangleItem.getStrokeWidth(),
                                 drawRectangleItem.getCornerRadius(),
                                 drawRectangleItem.getCornerRadius());
+                graphics.setColor(drawRectangleItem.getColor());
+                graphics.fill(shape);
                 Stroke oldStroke = graphics.getStroke();
                 graphics.setColor(drawRectangleItem.getStrokeColor());
                 graphics.setStroke(new BasicStroke(drawRectangleItem.getStrokeWidth()));
                 graphics.draw(shape);
                 graphics.setStroke(oldStroke);
             } else {
-                shape =
+                graphics.setColor(drawRectangleItem.getColor());
+                graphics.fill(
                         new RoundRectangle2D.Float(
                                 drawRectangleItem.getX(),
                                 drawRectangleItem.getY(),
                                 drawRectangleItem.getWidth(),
                                 drawRectangleItem.getHeight(),
                                 drawRectangleItem.getCornerRadius(),
-                                drawRectangleItem.getCornerRadius());
+                                drawRectangleItem.getCornerRadius()));
             }
         } else {
             // 使用矩形
             if (drawRectangleItem.getStrokeWidth() > 0) {
-                shape =
+                Shape shape =
                         new Rectangle2D.Float(
                                 drawRectangleItem.getX()
                                         + ((float) drawRectangleItem.getStrokeWidth() / 2),
@@ -714,22 +716,23 @@ public class ImageBuilder {
                                         + ((float) drawRectangleItem.getStrokeWidth() / 2),
                                 drawRectangleItem.getWidth() - drawRectangleItem.getStrokeWidth(),
                                 drawRectangleItem.getHeight() - drawRectangleItem.getStrokeWidth());
+                graphics.setColor(drawRectangleItem.getColor());
+                graphics.fill(shape);
                 Stroke oldStroke = graphics.getStroke();
                 graphics.setColor(drawRectangleItem.getStrokeColor());
                 graphics.setStroke(new BasicStroke(drawRectangleItem.getStrokeWidth()));
                 graphics.draw(shape);
                 graphics.setStroke(oldStroke);
             } else {
-                shape =
+                graphics.setColor(drawRectangleItem.getColor());
+                graphics.fill(
                         new Rectangle2D.Float(
                                 drawRectangleItem.getX(),
                                 drawRectangleItem.getY(),
                                 drawRectangleItem.getWidth(),
-                                drawRectangleItem.getHeight());
+                                drawRectangleItem.getHeight()));
             }
         }
-        graphics.setColor(drawRectangleItem.getColor());
-        graphics.fill(shape);
     }
 
     /** 建立要繪製的橢圓項目 */
@@ -774,30 +777,30 @@ public class ImageBuilder {
 
     /** 繪製橢圓項目 */
     private void drawEllipseItem(Graphics2D graphics, DrawEllipseItem drawEllipseItem) {
-        Shape shape;
         // 使用圓角矩形
         if (drawEllipseItem.getStrokeWidth() > 0) {
-            shape =
+            Shape shape =
                     new Ellipse2D.Float(
                             drawEllipseItem.getX() + ((float) drawEllipseItem.getStrokeWidth() / 2),
                             drawEllipseItem.getY() + ((float) drawEllipseItem.getStrokeWidth() / 2),
                             drawEllipseItem.getWidth() - drawEllipseItem.getStrokeWidth(),
                             drawEllipseItem.getHeight() - drawEllipseItem.getStrokeWidth());
+            graphics.setColor(drawEllipseItem.getColor());
+            graphics.fill(shape);
             Stroke oldStroke = graphics.getStroke();
             graphics.setColor(drawEllipseItem.getStrokeColor());
             graphics.setStroke(new BasicStroke(drawEllipseItem.getStrokeWidth()));
             graphics.draw(shape);
             graphics.setStroke(oldStroke);
         } else {
-            shape =
+            graphics.setColor(drawEllipseItem.getColor());
+            graphics.fill(
                     new Ellipse2D.Float(
                             drawEllipseItem.getX(),
                             drawEllipseItem.getY(),
                             drawEllipseItem.getWidth(),
-                            drawEllipseItem.getHeight());
+                            drawEllipseItem.getHeight()));
         }
-        graphics.setColor(drawEllipseItem.getColor());
-        graphics.fill(shape);
     }
 
     @Getter
